@@ -1,0 +1,125 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Bold;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue0;\red0\green0\blue0;
+}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\csgray\c0\c0;\csgray\c0;
+}
+\margl1440\margr1440\vieww13780\viewh9160\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs26 \cf0 \ul \ulc0 Bioinformatic Guide of Sequence site Extraction:
+\f1\b0 \ulnone \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b \cf0 Filtering forward junctions\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 > sample_forward_recombination <- sample_recombination[which(sample_recombination$Start < sample_recombination$Stop), ]\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b \cf0 Filtering junctions present in AT LEAST two datasets. Use dplyr for inner_join().\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 \
+> XN12_common_forward_recombination <- inner_join(XN1_forward_recombination, XN2_forward_recombination, by = c("Start", "Stop"), suffix = c(".a", ".b"))\
+> XN13_common_forward_recombination <- inner_join(XN1_forward_recombination, XN3_forward_recombination, by = c("Start", "Stop"), suffix = c(".a", ".c"))\
+> XN23_common_forward_recombination <- inner_join(XN2_forward_recombination, XN3_forward_recombination, by = c("Start", "Stop"), suffix = c(".b", ".c"))\
+> XN_all_common2x <- XN12_common_forward_recombination %>% merge(. , XN13_common_forward_recombination, by = c("Start", "Stop"), suffixes = c(".x", ".y"), all = TRUE) %>% merge(. , XN23_common_forward_recombination, by = c("Start", "Stop"), all = TRUE)\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \expnd0\expndtw0\kerning0
+> XN_all_common2x$Depth = XN_all_common2x$Depth.a.x + XN_all_common2x$Depth.a.y + XN_all_common2x$Depth.b.x + XN_all_common2x$Depth.b.y + XN_all_common2x$Depth.c.x + XN_all_common2x$Depth.c.y\
+> XN_all_common2x[is.na(XN_all_common2x)] <- 0\
+> XN_all_common2x <- XN_all_common2x[c(1,2,9)]\
+> write.table(XN_all_common2x, file = "/Volumes/EXT_STORAGE/Common_Junctions/XN/XN_common2x_forward_recombination.txt", sep = "\\t")\
+\
+
+\f0\b Filtering junctions present in ALL datasets\
+
+\f1\b0 \
+> XN_common_forward_recombination <- XN1_forward_recombination %>% inner_join(. , XN2_forward_recombination, by = c("Start", "Stop"), suffix = c(".a", ".b")) %>% inner_join(. , XN3_forward_recombination, by = c("Start", "Stop"))\
+> View(XN_common_forward_recombination)\
+> XN_common_forward_recombination$Total = XN_common_forward_recombination$Depth + XN_common_forward_recombination$Depth.a + XN_common_forward_recombination$Depth.b\
+> XN_common_forward_recombination <- XN_common_forward_recombination[c(1,2,6)]\
+> write.table(XN_common_forward_recombination, file = "/Volumes/EXT_STORAGE/Common_Junctions/XN/XN_common_forward_recombination.txt", sep = "\\t")\
+\
+
+\f0\b Extract sequences from junctions with weights.\
+
+\f1\b0 \
+\kerning1\expnd0\expndtw0 \CocoaLigature0 sort -k4 -rn WT_common_forward_recombination.bed > WT_common_forward_recombination.sort.bed ##Put your R filter output files in ViReMa-output BED format as following: [1] = Genome, [2] = Start Site, [3] = Stop Site, [4] = \'93Duplication\'94, [5] = Depth, [6] = \'93+\'94, [7] = Start Site, [8] = Stop Site.  Do not put labels on the columns.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf2 \
+#Annoying laptop note: if you are on your laptop, YOU HAVENT INSTALLED SAMTOOLS TO YOUR PATH BECAUSE YOU ARE A LAZY PERSON.  SET YOUR GODDAMN PATH MANUALLY YOU CRETIN.\
+python /Users/gribblj/Desktop/REc_Site_Extraction.py --Window 10 WT_common_forward_recombination.sort.bed MHV_virema.fasta WT_common_forward_recombination_seq.bed ##Sort by start site and note \'93smallest\'94 integer.  If smallest start site is nt 54, window needs to be <54. Run iteratively to test multiple window sizes.  Need samtools in PATH\
+\
+
+\f0\b Quantify nucleotide frequency per position\
+
+\f1\b0 \
+In RStudio:\
+\
+#Only keep Sequence column\
+WT_50_expanded_start <- WT_50_start[rep(row.names(WT_50_start), WT_50_start$V2), 1:2]\
+write.table(WT_50_expanded_start, file = "/Volumes/EXT_STORAGE/Common_Junctions/WT/WT_50_expanded.start.txt", sep = "\\t")\
+library(Biostrings)\
+WT_50_start <- read.table("/Volumes/EXT_STORAGE/Common_Junctions/WT/WT_50_expanded.start.txt", stringsAsFactors = F)\
+WT_50_start <- WT_50_start[c(4)]\
+new <- matrix(nrow = 60, ncol = 296935)\
+> for(i in 1:60)\{\
++ for(j in 1:296935)\{\
++ new [i,j] <- substring(WT_50_start[j,], i, i)\
++ \}\
++ \}\
+> countTable <- matrix(nrow = 60, ncol = 4)\
+> for(i in 1:60)\{\
++ columnSeq <- DNAStringSet(paste0(new[i,], collapse = ""))\
++ columnCounts <- letterFrequency(columnSeq, letters = "ACGT", OR = 0)\
++ countTable[i,] <- columnCounts\
++ \}\
+> colnames(countTable) <- c("A", "C", "G", "T")\
+> freqTable <- countTable/296935\
+> df <- round(t(freqTable), digit = 2)\
+> write.table(df, file=\'93/path/to/dest/.txt\'94, sep = \'93\\t\'94)\
+\
+
+\f0\b seqPattern oligonucleotide enrichment\
+
+\f1\b0 1. Make sure viral genome has a BSgenome package installed.\
+forgeBSgenomeDataPkg("mhv_seed.dcf")\
+##must have a 2bit version of genome and a seed file in the format as follows:\
+	Package: BSgenome.MHV.NCBI.AY910861\
+	Title: Synthetic construct murine hepatitis virus, complete genome (NCBI, 	AY910861.1)\
+	Description: Full genome sequence of murine hepatitis virus from a synthetic clone 	with 150 bp A-pad at 3' end\
+	Version: 1.0\
+	organism: murine hepatitis virus\
+	common_name: MHV\
+	provider: NCBI\
+	provider_version: AY910861\
+	release_date: Mar. 2005\
+	release_name: Synthetic construct murine hepatitis virus, complete genome\
+	source_url: https://www.ncbi.nlm.nih.gov/nuccore/60548081\
+	organism_biocview: murine_hepatitis_virus\
+	BSgenomeObjname: MHV\
+	seqs_srcdir: /Users/jennifergribble/Dropbox/R projects/Recombination_Motifs/\
+	seqfile_name: MHV_virema.2bit\
+\
+#Exit R and enter command terminal.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\fs28 \cf4 \cb1 $ R CMD build BSgenome.MHV.NCBI.AY910861/\
+$ R CMD check BSgenome.MHV.NCBI.AY910861_1.0.tar.gz\
+$ R CMD INSTALL BSgenome.MHV.NCBI.AY910861_1.0.tar.gz
+\fs26 \cf2 \cb3 \
+\
+#Back in to RStudio\
+>library(BSgenome.MHV.NCBI.AY910861)\
+\
+> WT16hmBstart <- GRanges(seqnames = WT16hmB_start_seqPattern$chr, ranges = IRanges(start = WT16hmB_start_seqPattern$junction, end = WT16hmB_start_seqPattern$junction), strand = WT16hmB_start_seqPattern$strand, interquantileWidth = WT16hmB_start_seqPattern$interquantilewidth, seqlengths = seqlengths(MHV))\
+\
+> WT16hmBstartflank <- promoters(WT16hmBstart, upstream = 30, downstream = 30)\
+> WT16hmBstartflankseq <- getSeq(MHV, WT16hmBstartflank)\
+> plotPatternDensityMap(regionsSeq = WT16hmBstartflankseq, patterns = c("AA", "CC", "GG", "TT"), seqOrder = order(WT16hmBstartflank$interquantileWidth), flankUp = 30, flankDown = 30, color = "blue")\
+> plotPatternOccurrenceAverage(regionsSeq = WT16hmAstartflankseq, patterns = c("AAA", "CCC", "GGG", "TTT"), flankUp = 30, flankDown = 30, color = c("gray", "blue3", "red3", "purple3"))}
