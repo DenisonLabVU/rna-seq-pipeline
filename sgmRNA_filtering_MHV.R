@@ -29,6 +29,7 @@ df_sgmRNA$Total <- sum(df_sgmRNA$Depth)
 #Print list of alternative sgmRNAs
 df_alternative <- anti_join(df_sgmRNA, df_canonical, by = "Depth")
 df_alternative$Total <- sum(df_alternative$Depth)
+df_alt_summary <- df_alternative %>% group_by(Type) %>% summarise(Sum = sum(Depth))
 #Write tables
 write.table(df_canonical, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/XNP3A_canonical_sgmRNAs.txt", sep = "\t", row.names = FALSE)
 write.table(df_alternative, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/XNP3A_alternative_sgmRNAs.txt", sep = "\t", row.names = FALSE)
