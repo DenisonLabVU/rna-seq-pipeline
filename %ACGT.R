@@ -25,7 +25,10 @@ freqTable <- countTable/n
 df<- round(t(freqTable), digit = 4)
 df <- df * 100
 df <- as.data.frame(t(df))
-vec_start <- c("+21", "+20", "+19", "+18", "+17", "+16", "+15", "+14", "+13", "+12", "+11", "+10", "+9", "+8", "+7", "+6", "+5", "+4", "+3", "+2", "+1", "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9", "-10", "-11", "-12", "-13", "-14", "-15", "-16", "-17", "-18", "-19", "-20")
-df$Position <- vec_start
+##Uncomment below if you are doing start or stop sequences. +1 always indicates the junction participating nucleotide. Position numbers indicate upstream sequence, negative numbers indicate downstream sequence.
+#vec_start <- c("+21", "+20", "+19", "+18", "+17", "+16", "+15", "+14", "+13", "+12", "+11", "+10", "+9", "+8", "+7", "+6", "+5", "+4", "+3", "+2", "+1", "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9", "-10", "-11", "-12", "-13", "-14", "-15", "-16", "-17", "-18", "-19", "-20")
+#df$Position <- vec_start
+#vec_stop <- c("-20", "-19", "-18", "-17", "-16", "-15", "-14", "-13", "-12", "-11", "-10", "-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1", "+1", "+2", "+3", "+4", "+5", "+6", "+7", "+8", "+9", "+10", "+11", "+12", "+13", "+14", "+15", "+16", "+17", "+18", "+19", "+20")
+#df$Position <- vec_stop
 df <- df[c(5,1,2,3,4)]
 write.table(df, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/NT_frequency/WTP3B_start_%ACGU.txt", sep = "\t", quote = FALSE, row.names = FALSE)
