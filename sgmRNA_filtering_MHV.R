@@ -1,5 +1,5 @@
 library(dplyr)
-df <- read.table("/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/XN_passages_virion/Junction_Files/XNP3A_forward_junctions.txt", header = TRUE)
+df <- read.table("/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/WT_passages_virion/Junction_Files/WTP3A_forward_junctions.txt", header = TRUE)
 df_TRSL <- filter(df, between(df$Start, 31, 103))
 df_sgmRNA2 <- filter(df_TRSL, between(df_TRSL$Stop, 21713, 21785))
 df_sgmRNA3 <- filter(df_TRSL, between(df_TRSL$Stop, 23888, 23960))
@@ -30,7 +30,16 @@ df_sgmRNA$Total <- sum(df_sgmRNA$Depth)
 df_alternative <- anti_join(df_sgmRNA, df_canonical, by = "Depth")
 df_alternative$Total <- sum(df_alternative$Depth)
 df_alt_summary <- df_alternative %>% group_by(Type) %>% summarise(Sum = sum(Depth))
+#Slice DVGs and turn format into BED
+df_DVG <- anti_join(df, df_sgmRNA, by = c("Start", "Stop"))
+df_DVG$Duplication <- "Duplication"
+df_DVG$Strand <- "+"
+df_DVG$Start2 <- df_DVG$Start
+df_DVG$Stop2 <- df_DVG$Stop
+df_DVG <- df_DVG[c(1,2,3,8,4,9,10,11)]
 #Write tables
-write.table(df_canonical, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/XNP3A_canonical_sgmRNAs.txt", sep = "\t", row.names = FALSE)
-write.table(df_alternative, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/XNP3A_alternative_sgmRNAs.txt", sep = "\t", row.names = FALSE)
-write.table(df_sgmRNA, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/XNP3A_total_sgmRNAs.txt", sep = "\t", row.names = FALSE)
+write.table(df_canonical, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/WTP3A_canonical_sgmRNAs.txt", sep = "\t", row.names = FALSE)
+write.table(df_alternative, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/WTP3A_alternative_sgmRNAs.txt", sep = "\t", row.names = FALSE)
+write.table(df_sgmRNA, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/WTP3A_total_sgmRNAs.txt", sep = "\t", row.names = FALSE)
+write.table(df_alt_summary, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/WTP3A_alt_sgmRNA_summary.txt", sep = "\t", row.names = FALSE)
+write.table(df_DVG, file = "/Users/jennifergribble/Dropbox/P250_recombination/Passage_Populations/sgmRNAs_DVGs/WTP3A_DVGs.bed.txt", sep = "\t", col.names = FALSE, row.names = FALSE, quote = FALSE)
