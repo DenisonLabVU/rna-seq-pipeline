@@ -1,5 +1,6 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
-{\fonttbl\f0\fnil\fcharset0 Menlo-Bold;\f1\fnil\fcharset0 Menlo-Regular;}
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Bold;\f2\fnil\fcharset0 Menlo-Regular;
+}
 {\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue0;\red0\green0\blue0;
 }
 {\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\csgray\c0\c0;\csgray\c0;
@@ -7,23 +8,25 @@
 \margl1440\margr1440\vieww13780\viewh9160\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\b\fs26 \cf0 \ul \ulc0 Bioinformatic Guide of Sequence site Extraction:
-\f1\b0 \ulnone \
+\f0\fs24 \cf0 \'97
+\f1\b\fs26 \ul \ulc0 Bioinformatic Guide of Sequence site Extraction:
+\f2\b0 \ulnone \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\b \cf0 Filtering forward junctions\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\b \cf0 Filtering forward junctions\
+\f2\b0 \cf0 > sample_forward_recombination <- sample_recombination[which(sample_recombination$Start < sample_recombination$Stop), ]\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f1\b0 \cf0 > sample_forward_recombination <- sample_recombination[which(sample_recombination$Start < sample_recombination$Stop), ]\
-\
+\f1\b \cf0 Filtering junctions present in AT LEAST two datasets. Use dplyr for inner_join().\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\b \cf0 Filtering junctions present in AT LEAST two datasets. Use dplyr for inner_join().\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
-
-\f1\b0 \cf0 \
+\f2\b0 \cf0 \
 > XN12_common_forward_recombination <- inner_join(XN1_forward_recombination, XN2_forward_recombination, by = c("Start", "Stop"), suffix = c(".a", ".b"))\
 > XN13_common_forward_recombination <- inner_join(XN1_forward_recombination, XN3_forward_recombination, by = c("Start", "Stop"), suffix = c(".a", ".c"))\
 > XN23_common_forward_recombination <- inner_join(XN2_forward_recombination, XN3_forward_recombination, by = c("Start", "Stop"), suffix = c(".b", ".c"))\
@@ -36,9 +39,9 @@
 > write.table(XN_all_common2x, file = "/Volumes/EXT_STORAGE/Common_Junctions/XN/XN_common2x_forward_recombination.txt", sep = "\\t")\
 \
 
-\f0\b Filtering junctions present in ALL datasets\
+\f1\b Filtering junctions present in ALL datasets\
 
-\f1\b0 \
+\f2\b0 \
 > XN_common_forward_recombination <- XN1_forward_recombination %>% inner_join(. , XN2_forward_recombination, by = c("Start", "Stop"), suffix = c(".a", ".b")) %>% inner_join(. , XN3_forward_recombination, by = c("Start", "Stop"))\
 > View(XN_common_forward_recombination)\
 > XN_common_forward_recombination$Total = XN_common_forward_recombination$Depth + XN_common_forward_recombination$Depth.a + XN_common_forward_recombination$Depth.b\
@@ -46,9 +49,9 @@
 > write.table(XN_common_forward_recombination, file = "/Volumes/EXT_STORAGE/Common_Junctions/XN/XN_common_forward_recombination.txt", sep = "\\t")\
 \
 
-\f0\b Extract sequences from junctions with weights.\
+\f1\b Extract sequences from junctions with weights.\
 
-\f1\b0 \
+\f2\b0 \
 \kerning1\expnd0\expndtw0 \CocoaLigature0 sort -k4 -rn WT_common_forward_recombination.bed > WT_common_forward_recombination.sort.bed ##Put your R filter output files in ViReMa-output BED format as following: [1] = Genome, [2] = Start Site, [3] = Stop Site, [4] = \'93Duplication\'94, [5] = Depth, [6] = \'93+\'94, [7] = Start Site, [8] = Stop Site.  Do not put labels on the columns.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 \cf2 \
@@ -56,9 +59,9 @@
 python /Users/gribblj/Desktop/REc_Site_Extraction.py --Window 10 WT_common_forward_recombination.sort.bed MHV_virema.fasta WT_common_forward_recombination_seq.bed ##Sort by start site and note \'93smallest\'94 integer.  If smallest start site is nt 54, window needs to be <54. Run iteratively to test multiple window sizes.  Need samtools in PATH\
 \
 
-\f0\b Quantify nucleotide frequency per position\
+\f1\b Quantify nucleotide frequency per position\
 
-\f1\b0 \
+\f2\b0 \
 In RStudio:\
 \
 #Only keep Sequence column\
@@ -85,9 +88,9 @@ new <- matrix(nrow = 60, ncol = 296935)\
 > write.table(df, file=\'93/path/to/dest/.txt\'94, sep = \'93\\t\'94)\
 \
 
-\f0\b seqPattern oligonucleotide enrichment\
+\f1\b seqPattern oligonucleotide enrichment\
 
-\f1\b0 1. Make sure viral genome has a BSgenome package installed.\
+\f2\b0 1. Make sure viral genome has a BSgenome package installed.\
 forgeBSgenomeDataPkg("mhv_seed.dcf")\
 ##must have a 2bit version of genome and a seed file in the format as follows:\
 	Package: BSgenome.MHV.NCBI.AY910861\

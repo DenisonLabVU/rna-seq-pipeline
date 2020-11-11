@@ -3,7 +3,7 @@ import math
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("File", help="Description")
-parser.add_argument("Virus_Coverage", help="Virus counts")
+parser.add_argument("Virus_Coverage", help="Median virus coverage")
 parser.add_argument("Virus_Name", help="Virus enter name of virus as per reference fasta (e.g. accession)")
 parser.add_argument("--Min_Coverage", help="Minimum counts to include in calculation of Shannon Entropy")
 parser.add_argument("-Quiet", action='store_true', help="Minimum counts")
