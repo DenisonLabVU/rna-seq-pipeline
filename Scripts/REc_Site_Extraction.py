@@ -34,7 +34,7 @@ with open(InFile, 'r') as In:
                 ToCoord = int(Data[2])
                 Strand = Data[5]
                 Fromcmd= Data[0] + ":" + str(FromCoord - Window) + "-" + str(FromCoord + Window)
-                FromSeq = check_output(['samtools', 'faidx', Genome, Fromcmd], universal_newlines=True).split()[1]
+                FromSeq = check_output(['samtools', 'faidx', '-n', '1000', Genome, Fromcmd], universal_newlines=True).split()[1]
                 if FromSeq:
                         FromSeq = FromSeq.upper()
                         if Strand == "-":
@@ -44,7 +44,7 @@ with open(InFile, 'r') as In:
                 else:
                         print("Failed locus in index: ", Fromcmd)
                 Tocmd= Data[0] + ":" + str(ToCoord - Window) + "-" + str(ToCoord + Window)
-                ToSeq = check_output(['samtools', 'faidx', Genome, Tocmd], universal_newlines=True).split()[1]
+                ToSeq = check_output(['samtools', 'faidx', '-n', '1000', Genome, Tocmd], universal_newlines=True).split()[1]
                 if ToSeq:
                         ToSeq = ToSeq.upper()
                         if Strand == "-":
