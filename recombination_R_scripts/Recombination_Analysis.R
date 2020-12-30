@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-print("Usage: Recombination_Analysis.R sample_base_name wd_path reference_accession reference_file")
+print("Usage: Recombination_Analysis.R sample_base_name wd_path virus reference_accession reference_file")
 library(dplyr)
 library(ggplot2)
 args <- commandArgs(trailingOnly = TRUE)
@@ -56,7 +56,8 @@ if (dir.exists(paste(wd, "sgmRNAs_DVGs", "/", sep = "/", collapse = "/"))) {
   cat("sgmRNAs_DVGs does not exist in current working directory - creating", sep="\n")
   dir.create(file.path(wd, "sgmRNAs_DVGs"))
 }
-if (args[3] == "AY910861.1") {
+##Okay so I was thinking I will add another argument delineating which virus is in it and pull the accession number 
+if (args[3] == "MHV") {
   df_TRSL <- filter(data_forward, between(data_forward$Start, 31, 103))
   df_sgmRNA2 <- filter(df_TRSL, between(df_TRSL$Stop, 21713, 21785))
   df_sgmRNA3 <- filter(df_TRSL, between(df_TRSL$Stop, 23888, 23960))
@@ -66,22 +67,22 @@ if (args[3] == "AY910861.1") {
   df_sgmRNA7 <- filter(df_TRSL, between(df_TRSL$Stop, 29621, 29693))
   #Create null dataframes if no observations
   if(nrow(df_sgmRNA2) == 0) {
-    df_sgmRNA2 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA2 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA2) == 0) {
-    df_sgmRNA3 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA3 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA4) == 0) {
-    df_sgmRNA4 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA4 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA5) == 0) {
-    df_sgmRNA5 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA5 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA6) == 0) {
-    df_sgmRNA6 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA6 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA7) == 0) {
-    df_sgmRNA7 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA7 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   #Add column identifying sgmRNA species
   df_sgmRNA2$Type <- "sgmRNA2"
@@ -119,7 +120,7 @@ if (args[3] == "AY910861.1") {
   write.table(df_sgmRNA, file = paste(wd, "sgmRNAs_DVGs/", name, "_total_sgmRNAs.txt", sep=""), sep = "\t", row.names = FALSE)
   write.table(df_alt_summary, file = paste(wd, "sgmRNAs_DVGs/", name, "_alt_sgmRNA_summary.txt", sep=""), sep = "\t", row.names = FALSE)
   write.table(df_DVG, file = paste(wd, "sgmRNAs_DVGs/", name, "_DVGs.bed.txt", sep=""), sep = "\t", col.names = FALSE, row.names = FALSE, quote = FALSE)
-} else if (args[3] == "JX869059.2") {
+} else if (args[3] == "MERS") {
   df_TRSL <- filter(data_forward, between(data_forward$Start, 32, 97))
   df_sgmRNA2 <- filter(df_TRSL, between(df_TRSL$Stop, 21374, 21439))
   df_sgmRNA3 <- filter(df_TRSL, between(df_TRSL$Stop, 25490, 25555))
@@ -130,25 +131,25 @@ if (args[3] == "AY910861.1") {
   df_sgmRNA8 <- filter(df_TRSL, between(df_TRSL$Stop, 28514, 28579))
   #Create null dataframes if no observations
   if(nrow(df_sgmRNA2) == 0) {
-    df_sgmRNA2 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA2 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA2) == 0) {
-    df_sgmRNA3 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA3 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA4) == 0) {
-    df_sgmRNA4 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA4 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA5) == 0) {
-    df_sgmRNA5 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA5 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA6) == 0) {
-    df_sgmRNA6 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA6 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA7) == 0) {
-    df_sgmRNA7 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA7 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA8) == 0) {
-    df_sgmRNA8 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA8 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   #Add column identifying sgmRNA species
   df_sgmRNA2$Type <- "sgmRNA2"
@@ -188,10 +189,10 @@ if (args[3] == "AY910861.1") {
   write.table(df_sgmRNA, file = paste(wd, "sgmRNAs_DVGs/", name, "_total_sgmRNAs.txt", sep=""), sep = "\t", row.names = FALSE)
   write.table(df_alt_summary, file = paste(wd, "sgmRNAs_DVGs/", name, "_alt_sgmRNA_summary.txt", sep=""), sep = "\t", row.names = FALSE)
   write.table(df_DVG, file = paste(wd, "sgmRNAs_DVGs/", name, "_DVGs.bed.txt", sep=""), sep = "\t", col.names = FALSE, row.names = FALSE, quote = FALSE)
-} else if (args[3] == "MT020881.1") {
+} else if (args[3] == "SARS2") {
   library(Biostrings)
   SARS2_TRS = "ACGAAC"
-  SARS2_fasta <- readDNAStringSet(args[4], "fasta")
+  SARS2_fasta <- readDNAStringSet(args[5], "fasta")
   TRS_positions <- vmatchPattern(SARS2_TRS, SARS2_fasta)
   TRS_start <- startIndex(TRS_positions)
   TRS_stop <- endIndex(TRS_positions)
@@ -218,28 +219,28 @@ if (args[3] == "AY910861.1") {
   df_sgmRNA9 <- filter(df_TRSL, between(df_TRSL$Stop, as.numeric(TRS_matrix[9,1]), as.numeric(TRS_matrix[9,2])))
   #Create null dataframes if no observations
   if(nrow(df_sgmRNA2) == 0) {
-    df_sgmRNA2 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA2 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA2) == 0) {
-    df_sgmRNA3 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA3 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA4) == 0) {
-    df_sgmRNA4 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA4 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA5) == 0) {
-    df_sgmRNA5 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA5 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA6) == 0) {
-    df_sgmRNA6 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA6 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA7) == 0) {
-    df_sgmRNA7 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA7 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA8) == 0) {
-    df_sgmRNA8 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA8 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   if(nrow(df_sgmRNA9) == 0) {
-    df_sgmRNA9 <- data.frame("Genome" = args[3], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
+    df_sgmRNA9 <- data.frame("Genome" = args[4], "Start" = 0, "Stop" = 0, "Depth" = 0, "Total" = 0, "Frequency" = 0, "logFreq" = 0)
   }
   #Add column identifying sgmRNA species
   df_sgmRNA2$Type <- "sgmRNA2"
