@@ -1,0 +1,15 @@
+How to get Vantage data onto ACCRE:
+
+1) load LFTP module
+module load GCC/5.4.0-2.26 lftp
+ 
+2) connect to shredder, using your username/password combo
+
+lftp ftp://shredder.file.vumc.org:21 -u username:password -e "set ssl:verify-certificate no"
+ 
+3) look at data structure on server. It will usually be a single directory, with fastq files
+
+ls
+ 
+4) if data is read data only, you can use mget to copy the entire directory:
+mget -d /
