@@ -28,6 +28,8 @@ coverage <- read.table(paste(wd, name, "_virema_coverage.txt", sep=""), header =
 coverage <- coverage %>% rename(Genome = V1, Position = V2, Coverage = V3)
 total_depth <- sum(coverage$Coverage)
 cat(paste0("The total mapped depth is: ", total_depth, "\n"))
+mean_depth <- mean(coverage$Coverage)
+cat(paste0("The mean depth is: ", mean_depth, "\n"))
 data_forward <- data[which(data$Start < data$Stop), ]
 data_forward$Total = sum(data_forward$Depth)
 data_forward$Frequency = data_forward$Depth / data_forward$Total
@@ -283,5 +285,5 @@ if (args[3] == "MHV") {
   write.table(df_alt_summary, file = paste(wd, "sgmRNAs_DVGs/", name, "_alt_sgmRNA_summary.txt", sep=""), sep = "\t", row.names = FALSE)
   write.table(df_DVG, file = paste(wd, "sgmRNAs_DVGs/", name, "_DVGs.bed.txt", sep=""), sep = "\t", col.names = FALSE, row.names = FALSE, quote = FALSE)
 } else {
-  stop("Unknown genome! Check reference accession number and change to AY910861.1 (MHV), JX869059.2 (MERS), or MT020881.1 (SARS2).")
+  stop("Unknown genome! Check reference accession number and change to AY910861.1 (MHV), JX869059.2 (MERS), or SARS-CoV-2.")
 }
