@@ -2,24 +2,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-Files = '''MERS_LCP1_virema_MHcompileVirus_Recombination_Results.txt
-MERS_LDP1_virema_MHcompileVirus_Recombination_Results.txt
-MERS_LEP1_virema_MHcompileVirus_Recombination_Results.txt
-SARSCoV2_A_virema_MHcompileVirus_Recombination_Results.txt
-SARSCoV2_B_virema_MHcompileVirus_Recombination_Results.txt
-SARSCoV2_C_virema_MHcompileVirus_Recombination_Results.txt
-WT16hmA_virema_MHcompileVirus_Recombination_Results.txt
-WT16hmB_virema_MHcompileVirus_Recombination_Results.txt
-WT16hmC_virema_MHcompileVirus_Recombination_Results.txt
-XN24hmA_virema_MHcompileVirus_Recombination_Results.txt
-XN24hmB_virema_MHcompileVirus_Recombination_Results.txt
-XN24hmC_virema_MHcompileVirus_Recombination_Results.txt
-WT-1_virema_MHcompileVirus_Recombination_Results.txt
-WT-2_virema_MHcompileVirus_Recombination_Results.txt
-WT-3_virema_MHcompileVirus_Recombination_Results.txt
-XN-1_virema_MHcompileVirus_Recombination_Results.txt
-XN-2_virema_MHcompileVirus_Recombination_Results.txt
-XN-3_virema_MHcompileVirus_Recombination_Results.txt
+Files = '''0-01A_MERS_to_SARS2.txt
+0-01A_SARS2_to_MERS.txt
+0-01B_MERS_to_SARS2.txt
+0-01B_SARS2_to_MERS.txt
+0-01C_MERS_to_SARS2.txt
+0-01C_SARS2_to_MERS.txt
+0-01D_MERS_to_SARS2.txt
+0-01D_SARS2_to_MERS.txt
+0-01E_MERS_to_SARS2.txt
+0-01E_SARS2_to_MERS.txt
+0-01F_MERS_to_SARS2.txt
+0-01F_SARS2_to_MERS.txt
+0-1A_MERS_to_SARS2.txt
+0-1A_SARS2_to_MERS.txt
+0-1B_MERS_to_SARS2.txt
+0-1B_SARS2_to_MERS.txt
+0-1C_MERS_to_SARS2.txt
+0-1C_SARS2_to_MERS.txt
+0-1D_MERS_to_SARS2.txt
+0-1D_SARS2_to_MERS.txt
+0-1E_MERS_to_SARS2.txt
+0-1E_SARS2_to_MERS.txt
+0-1F_MERS_to_SARS2.txt
+0-1F_SARS2_to_MERS.txt
 '''.split()
 
 
